@@ -1,8 +1,10 @@
-name: CI - Forum API
+name: CI
 
 on:
+  push:
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -10,33 +12,25 @@ jobs:
 
     services:
       postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: forumapi_test
+        image: postgres:14
         ports:
           - 5432:5432
+        env:
+          POSTGRES_USER: tama
+          POSTGRES_PASSWORD: tama_test_password
+          POSTGRES_DB: forumapi
         options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+          --health-cmd="pg_isready -U tama -d forumapi"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
 
     env:
-      TZ: UTC
-
-      # DB untuk test (dipakai pool.js via PG*_TEST)
-      PGHOST_TEST: localhost
-      PGPORT_TEST: 5432
-      PGUSER_TEST: postgres
-      PGPASSWORD_TEST: postgres
-      PGDATABASE_TEST: forumapi_test
-
-      # Untuk node-pg-migrate (npm run migrate)
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/forumapi_test
-
-      # Konfigurasi JWT & bcrypt (harus ada biar @hapi/jwt nggak error)
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: tama
+      PGPASSWORD: tama_test_password
+      PGDATABASE: forumapi
       ACCESS_TOKEN_KEY: d60f13c865cafc7653befc6c4663b5509215b7393a9265aa0cd0aabd9d15072e098072ea1f8607b4068d3a9c320fcd35
       REFRESH_TOKEN_KEY: f439c714d37e2d2e7767cbac7f72a46708f87a3b37fe023046d988aa82335de8a624505cfe10f37d2c774d5977f0d914
       ACCESS_TOKEN_AGE: 3000
