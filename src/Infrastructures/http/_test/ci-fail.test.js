@@ -1,5 +1,5 @@
-describe('CI failing scenario', () => {
-  it('should fail on purpose for CI demo', () => {
-    expect(1 + 1).toBe(3);
+describe('CI fixed scenario', () => {
+  it('should pass now for CI demo', () => {
+    expect(1 + 1).toBe(2);
   });
 });
